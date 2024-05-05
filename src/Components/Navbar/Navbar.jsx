@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <main>
+    <main className="bg-[#F2F2F2]">
       <div className="container mx-auto">
-        <div className="navbar bg-base-100">
+        <div className="navbar bg-[#F2F2F2]">
           <div className="navbar-start">
             <div className="dropdown">
               <div
@@ -20,19 +20,19 @@ const Navbar = () => {
                 className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
               >
                 <Link to="/">
-                  <li>Home</li>
+                  <li className="btn btn-sm">Home</li>
                 </Link>
                 <Link to="/converter">
-                  <li>Converter</li>
+                  <li className="btn btn-sm my-3">Converter</li>
                 </Link>
                 <Link to="/IctCalculator">
-                  <li>ICT Calculator</li>
+                  <li className="btn btn-sm">ICT Calculator</li>
                 </Link>
                 <Link to="/ScientificCalculator">
-                  <li className="px-3 py-2">Scientific Calculator</li>
+                  <li className="btn btn-sm my-3">Scientific Calculator</li>
                 </Link>
                 <Link to="/Currency">
-                  <li className="px-3 py-2">Currency</li>
+                  <li className="btn btn-sm">Currency</li>
                 </Link>
               </ul>
             </div>
@@ -43,19 +43,19 @@ const Navbar = () => {
           <div className="navbar-end hidden lg:flex">
             <ul className="menu menu-horizontal px-1">
               <Link to="/">
-                <li className="px-3 py-2">Home</li>
+                <li className="btn btn-sm">Home</li>
               </Link>
               <Link to="/converter">
-                <li className="px-3 py-2">Converter</li>
+                <li className="btn btn-sm mx-3">Converter</li>
               </Link>
               <Link to="/IctCalculator">
-                <li className="px-3 py-2">ICT Calculator</li>
+                <li className="btn btn-sm">ICT Calculator</li>
               </Link>
               <Link to="/ScientificCalculator">
-                <li className="px-3 py-2">Scientific Calculator</li>
+                <li className="btn btn-sm mx-3">Scientific Calculator</li>
               </Link>
               <Link to="/Currency">
-                <li className="px-3 py-2">Currency</li>
+                <li className="btn btn-sm">Currency</li>
               </Link>
             </ul>
           </div>

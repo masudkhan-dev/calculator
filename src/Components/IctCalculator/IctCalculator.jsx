@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { GrPowerReset } from "react-icons/gr";
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegHeart, FaEquals } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 const IctCalculator = () => {
   const [fromBase, setFromBase] = useState("Binary");
@@ -122,6 +123,12 @@ const IctCalculator = () => {
     setInputs([...inputs, { value: "" }]);
   };
 
+  const handleDeleteInput = () => {
+    const newInputs = [...inputs];
+    newInputs.pop();
+    setInputs(newInputs);
+  };
+
   return (
     <main>
       <div className="container mx-auto">
@@ -183,19 +190,20 @@ const IctCalculator = () => {
           </div>
 
           {/* Calculate, reset */}
-          <div className="flex justify-between gap-1 md:gap-10">
-            <button
-              className="btn btn-success text-white"
-              onClick={handleCalculate}
-            >
-              = Calculate
+          <div className="grid grid-cols-2 gap-x-10 md:gap-x-40 md:grid-cols-2  gap-8 md:gap-5">
+            <button className="btn btn-success " onClick={handleCalculate}>
+              <FaEquals className="h-3 w-3" /> Calculate
             </button>
-            <button className="btn btn-error text-white" onClick={handleReset}>
-              <GrPowerReset /> Reset
+            <button className="btn btn-warning " onClick={handleReset}>
+              <GrPowerReset className="h-5 w-5" /> Reset
             </button>
-            <button className="btn btn-accent" onClick={handleAddInput}>
+            <button className="btn btn-info" onClick={handleAddInput}>
               <FaRegHeart className="h-6 w-6" />
               Add
+            </button>
+            <button className="btn btn-error" onClick={handleDeleteInput}>
+              <MdDelete className="h-6 w-6" />
+              Delete
             </button>
           </div>
 
@@ -205,7 +213,7 @@ const IctCalculator = () => {
               name=""
               id=""
               cols="30"
-              rows="5"
+              rows="3"
               placeholder="Show results here"
               className="border border-green-500 bg-gray-200 p-5 rounded-md outline-none w-72 md:w-[400px]"
               value={result}
