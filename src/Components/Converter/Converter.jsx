@@ -92,6 +92,21 @@ const Converter = () => {
     setToBase(fromBase);
   };
 
+  const getPlaceholderText = () => {
+    switch (fromBase) {
+      case "Binary":
+        return "Enter a binary number";
+      case "Decimal":
+        return "Enter a decimal number";
+      case "Octal":
+        return "Enter an octal number";
+      case "Hexadecimal":
+        return "Enter a hexadecimal number";
+      default:
+        return "Type here";
+    }
+  };
+
   return (
     <main>
       <div className="container mx-auto">
@@ -135,13 +150,18 @@ const Converter = () => {
 
           {/* Input hexadecimal value */}
           <div className="my-5">
-            <input
-              type="text"
-              placeholder="Type here"
-              className="input input-bordered w-[300px] md:w-[410px]"
-              value={inputValue}
-              onChange={handleInputChange}
-            />
+            <div className="flex flex-col justify-center items-end">
+              <input
+                type="text"
+                placeholder={getPlaceholderText()}
+                className="input input-bordered w-[300px] md:w-[410px] relative"
+                value={inputValue}
+                onChange={handleInputChange}
+              />
+              <p className=" mr-5 inline-block  text-slate-400 text-md absolute">
+                {inputValue.length}
+              </p>
+            </div>
             {errorMessage && (
               <p className="text-red-500 text-sm">{errorMessage}</p>
             )}
@@ -164,17 +184,20 @@ const Converter = () => {
           </div>
 
           {/* Result */}
-          <div className="my-5">
+          <div className="my-5 flex flex-col justify-center items-center">
             <textarea
               name=""
               id=""
               cols="30"
-              rows="5"
+              rows="3"
               placeholder="Show results here"
-              className="border border-green-500 bg-gray-200 p-5 rounded-md outline-none w-72 md:w-[400px]"
+              className="border border-green-500 bg-gray-50 p-5 rounded-md outline-none w-72 md:w-[400px] relative"
               readOnly
               value={outputValue}
             ></textarea>
+            <p className=" ml-60 md:ml-[22em] text-slate-400 text-md absolute">
+              {outputValue.length}
+            </p>
           </div>
         </div>
       </div>

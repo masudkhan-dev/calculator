@@ -9,6 +9,7 @@ const IctCalculator = () => {
   const [inputs, setInputs] = useState([{ value: "" }]);
   const [result, setResult] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [inputCounts, setInputCounts] = useState(Array(inputs.length).fill(0));
 
   const handleCalculate = () => {
     let isValidInput = true;
@@ -116,6 +117,12 @@ const IctCalculator = () => {
     const newInputs = [...inputs];
     newInputs[index].value = inputValue;
     setInputs(newInputs);
+
+    // Update character count
+    const newInputCounts = [...inputCounts];
+    newInputCounts[index] = inputValue.length;
+    setInputCounts(newInputCounts);
+
     setErrorMessage("");
   };
 
@@ -173,15 +180,21 @@ const IctCalculator = () => {
           {/* Input values */}
           <div className="flex flex-col gap-2 my-2">
             {inputs.map((input, index) => (
-              <div key={index} className="flex flex-col gap-2 my-2">
+              <div
+                key={index}
+                className="flex flex-col justify-center items-center gap-2 my-2"
+              >
                 <input
                   type="text"
                   name={`inputValue${index + 1}`}
-                  className="input input-bordered w-72 md:w-[410px]"
+                  className="input input-bordered w-72 md:w-[410px] relative"
                   value={input.value}
                   onChange={(e) => handleInputChange(index, e.target.value)}
                   placeholder={`Enter ${fromBase} number`}
                 />
+                <p className="absolute ml-60 md:ml-[22em] text-gray-300 text-md">
+                  {inputCounts[index]}
+                </p>
               </div>
             ))}
             {errorMessage && (
@@ -208,17 +221,20 @@ const IctCalculator = () => {
           </div>
 
           {/* Result */}
-          <div className="my-5">
+          <div className="my-5 flex flex-col justify-center items-center">
             <textarea
               name=""
               id=""
               cols="30"
               rows="3"
               placeholder="Show results here"
-              className="border border-green-500 bg-gray-200 p-5 rounded-md outline-none w-72 md:w-[400px]"
+              className="border border-green-500 bg-gray-50 p-5 rounded-md outline-none w-72 md:w-[400px] relative"
               value={result}
               readOnly
             ></textarea>
+            <p className="absolute ml-60 md:ml-[22em] text-slate-400 text-md">
+              {result.length}
+            </p>
           </div>
         </div>
       </div>
