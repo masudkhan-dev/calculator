@@ -172,7 +172,7 @@ const Currency = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mx-5 md:mx-72">
             <div>
               <input
-                type="text"
+                type="number"
                 value={amount1}
                 onChange={(e) => handleAmountChange(e, "amount1")}
                 className="border-b-2 border-neutral bg-gray-200 py-3 w-[300px] outline-none px-3"
@@ -232,7 +232,7 @@ const Currency = () => {
 
             <div>
               <input
-                type="text"
+                type="number"
                 value={amount2}
                 onChange={(e) => handleAmountChange(e, "amount2")}
                 className="border-b-2 border-neutral bg-gray-200 py-3 w-[300px] outline-none px-3"

@@ -17,16 +17,16 @@ const Converter = () => {
 
     switch (fromBase) {
       case "Binary":
-        inputPattern = /^[01]*$/;
+        inputPattern = /^[01]*\.?[01]*$/;
         break;
       case "Decimal":
-        inputPattern = /^[0-9]*$/;
+        inputPattern = /^[0-9]*\.?[0-9]*$/;
         break;
       case "Octal":
-        inputPattern = /^[0-7]*$/;
+        inputPattern = /^[0-7]*\.?[0-7]*$/;
         break;
       case "Hexadecimal":
-        inputPattern = /^[0-9A-F]*$/;
+        inputPattern = /^[0-9A-F]*\.?[0-9A-F]*$/;
         break;
       default:
         isValidInput = false;
@@ -42,40 +42,122 @@ const Converter = () => {
 
   const handleConvert = () => {
     let result = "";
-    let parsedValue = parseInt(inputValue, 16);
-    if (isNaN(parsedValue)) {
-      setErrorMessage("Please enter a valid hexadecimal number.");
-      return;
-    }
 
+    // Handle decimal point conversion
+    const convertBase = (value, fromRadix, toRadix) => {
+      // Split the number into integer and fractional parts
+      const [integerPart, fractionalPart] = value.split(".");
+
+      // Convert integer part
+      let intResult = parseInt(integerPart, fromRadix);
+      if (isNaN(intResult)) {
+        setErrorMessage(
+          `Please enter a valid ${fromBase.toLowerCase()} number.`
+        );
+        return "";
+      }
+
+      // Convert fractional part if exists
+      let fracResult = 0;
+      if (fractionalPart) {
+        // Convert fractional part by summing place values
+        fracResult = fractionalPart.split("").reduce((acc, digit, index) => {
+          const digitValue = parseInt(digit, fromRadix);
+          return acc + digitValue / Math.pow(fromRadix, index + 1);
+        }, 0);
+      }
+
+      // Combine integer and fractional parts
+      const fullNumber = intResult + fracResult;
+
+      // Convert to target base
+      if (toRadix === 10) {
+        // For decimal, we can use toFixed to limit decimal places
+        return fullNumber.toFixed(6).replace(/\.?0+$/, "");
+      }
+
+      // Convert integer part
+      const intPartResult = Math.floor(fullNumber)
+        .toString(toRadix)
+        .toUpperCase();
+
+      // Convert fractional part
+      if (fractionalPart) {
+        let fracPartResult = "";
+        let fracPart = fullNumber % 1;
+
+        // Calculate fractional part for 6 decimal places
+        for (let i = 0; i < 6; i++) {
+          fracPart *= toRadix;
+          const digit = Math.floor(fracPart);
+          fracPartResult += digit.toString(toRadix).toUpperCase();
+          fracPart %= 1;
+        }
+
+        return fracPartResult
+          ? `${intPartResult}.${fracPartResult}`
+          : intPartResult;
+      }
+
+      return intPartResult;
+    };
+
+    // Determine conversion based on selected bases
     switch (fromBase) {
       case "Binary":
-        result = parseInt(inputValue, 2);
+        result = convertBase(
+          inputValue,
+          2,
+          toBase === "Binary"
+            ? 2
+            : toBase === "Decimal"
+            ? 10
+            : toBase === "Octal"
+            ? 8
+            : 16
+        );
         break;
       case "Decimal":
-        result = parseInt(inputValue, 10);
+        result = convertBase(
+          inputValue,
+          10,
+          toBase === "Binary"
+            ? 2
+            : toBase === "Decimal"
+            ? 10
+            : toBase === "Octal"
+            ? 8
+            : 16
+        );
         break;
       case "Octal":
-        result = parseInt(inputValue, 8);
+        result = convertBase(
+          inputValue,
+          8,
+          toBase === "Binary"
+            ? 2
+            : toBase === "Decimal"
+            ? 10
+            : toBase === "Octal"
+            ? 8
+            : 16
+        );
+        break;
+      case "Hexadecimal":
+        result = convertBase(
+          inputValue,
+          16,
+          toBase === "Binary"
+            ? 2
+            : toBase === "Decimal"
+            ? 10
+            : toBase === "Octal"
+            ? 8
+            : 16
+        );
         break;
       default:
-        result = parsedValue;
-        break;
-    }
-
-    switch (toBase) {
-      case "Binary":
-        result = result.toString(2);
-        break;
-      case "Decimal":
-        result = result.toString(10);
-        break;
-      case "Octal":
-        result = result.toString(8);
-        break;
-      default:
-        result = result.toString(16).toUpperCase();
-        break;
+        result = "";
     }
 
     setOutputValue(result);
@@ -95,13 +177,13 @@ const Converter = () => {
   const getPlaceholderText = () => {
     switch (fromBase) {
       case "Binary":
-        return "Enter a binary number";
+        return "Enter a binary number (e.g., 1010.11)";
       case "Decimal":
-        return "Enter a decimal number";
+        return "Enter a decimal number (e.g., 14.3)";
       case "Octal":
-        return "Enter an octal number";
+        return "Enter an octal number (e.g., 16.4)";
       case "Hexadecimal":
-        return "Enter a hexadecimal number";
+        return "Enter a hexadecimal number (e.g., A.5)";
       default:
         return "Type here";
     }
